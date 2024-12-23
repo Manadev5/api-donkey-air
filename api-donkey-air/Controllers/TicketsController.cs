@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_donkey_air.Models;
+using MySql.Data.MySqlClient;
+using System.Data;
+using Mysqlx.Connection;
 
 namespace api_donkey_air.Controllers
 {
@@ -21,24 +19,64 @@ namespace api_donkey_air.Controllers
         }
 
         // GET: api/Tickets
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTicket()
         {
             return await _context.Ticket.ToListAsync();
         }
 
         // GET: api/Tickets/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Ticket>> GetTicket(long id)
+        [HttpGet]
+        public async Task<ActionResult<List<Ticket>>> GetTickets(long idDeparture, long idDestination)
         {
-            var ticket = await _context.Ticket.FindAsync(id);
-
-            if (ticket == null)
+            var tickets = new List<Ticket>();
+            try
             {
-                return NotFound();
-            }
+                // Connexion à la base de données
+                using (MySqlConnection connection = new MySqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    await connection.OpenAsync();
 
-            return ticket;
+                    using (MySqlCommand cmd = new MySqlCommand("GetTicketsByDepartureAndDestination", connection))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Ajout des paramètres
+                        cmd.Parameters.AddWithValue("@p_IdDeparture", idDeparture);
+                        cmd.Parameters.AddWithValue("@p_IdDestination", idDestination);
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                // Créez un objet Ticket basé sur les résultats
+                                var ticket = new Ticket
+                                {
+                                    IdTicket = reader.GetInt64("IdTicket"),
+                                    IdDeparture = reader.GetInt64("IdDeparture"),
+                                    IdDestination = reader.GetInt64("IdDestination"),
+
+                                    // Ajoutez ici d'autres propriétés si nécessaire
+                                };
+
+                                tickets.Add(ticket);
+                            }
+                        }
+                    }
+                }
+
+                if (tickets.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return tickets;
+            }
+            catch (Exception ex)
+            {
+                // Gérer les erreurs
+                return StatusCode(500, $"Erreur : {ex.Message}");
+            }
         }
 
         // PUT: api/Tickets/5
