@@ -4,6 +4,7 @@ using api_donkey_air.Models;
 using MySql.Data.MySqlClient;
 using System.Data;
 using Mysqlx.Connection;
+using System.Data.Common;
 
 namespace api_donkey_air.Controllers
 {
@@ -29,7 +30,7 @@ namespace api_donkey_air.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ticket>>> GetTickets(long idDeparture, long idDestination)
         {
-            var tickets = new List<Ticket>();
+            List<Ticket> tickets = new List<Ticket>();
             try
             {
                 // Connexion à la base de données
@@ -45,18 +46,24 @@ namespace api_donkey_air.Controllers
                         cmd.Parameters.AddWithValue("@p_IdDeparture", idDeparture);
                         cmd.Parameters.AddWithValue("@p_IdDestination", idDestination);
 
-                        using (var reader = await cmd.ExecuteReaderAsync())
+                        using (DbDataReader reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
-                                // Créez un objet Ticket basé sur les résultats
-                                var ticket = new Ticket
+                                object value = reader["user_ticket_id"];
+                                Ticket ticket = new Ticket
                                 {
                                     IdTicket = reader.GetInt64("IdTicket"),
                                     IdDeparture = reader.GetInt64("IdDeparture"),
                                     IdDestination = reader.GetInt64("IdDestination"),
-
-                                    // Ajoutez ici d'autres propriétés si nécessaire
+                                    departure_date = reader.GetDateTime("departure_date"),
+                                    boarding_hour = (TimeSpan)reader["boarding_hour"],
+                                    arrival_hour = (TimeSpan)reader["arrival_hour"],
+                                    travel_time = (TimeSpan)reader["travel_time"],
+                                    travel_number = reader.GetString("travel_number"),
+                                    sit_number = reader.GetString("sit_number"),
+                                    price = reader.GetDecimal("price"),
+                                    user_ticket_id = value is DBNull ? 0 : reader.GetInt64("user_ticket_id")
                                 };
 
                                 tickets.Add(ticket);
