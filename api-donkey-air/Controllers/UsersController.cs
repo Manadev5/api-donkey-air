@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_donkey_air.Models;
+using System.Data.Common;
+using System.Data;
+using MySql.Data.MySqlClient;
+using Mysqlx.Connection;
 
 namespace api_donkey_air.Controllers
 {
@@ -75,12 +79,66 @@ namespace api_donkey_air.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async  Task<IActionResult> PostUser([FromBody] User user)
         {
-            _context.User.Add(user);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.IdUser }, user);
+                if (string.IsNullOrWhiteSpace(user.name) || string.IsNullOrWhiteSpace(user.password))
+            {
+                return BadRequest("Le nom où le mot de passe n\'est pas reisegné dans le bon format");
+            }
+
+            var existingUser = await _context.User.FirstOrDefaultAsync(u => u.name == user.name);
+            if (existingUser != null)
+            {
+                return BadRequest("Un utilisateur avec ce nom existe déjà.");
+            }
+
+            //hash password pour la base de données
+            string hashedPassword = AuthService.HashPassword(user.password);
+
+            try
+            {
+                // Connexion à la base de données
+                using (DbConnection connection = _context.Database.GetDbConnection())
+                {
+                    if (connection.State != ConnectionState.Open)
+                    await connection.OpenAsync();
+
+                    using (var cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = "CreateNewUser";
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        // Ajout des paramètres
+                        var pName = cmd.CreateParameter();
+                        pName.ParameterName = "@p_name";
+                        pName.Value = user.name;
+                        cmd.Parameters.Add(pName);
+
+                        var pPassword = cmd.CreateParameter();
+                        pPassword.ParameterName = "@p_password";
+                        pPassword.Value = hashedPassword;
+                        cmd.Parameters.Add(pPassword);
+
+                        using(var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if(await reader.ReadAsync())
+                            {
+                                long newUserId = reader.GetInt64(reader.GetOrdinal("NewUserId"));
+                            }
+                        }
+
+                        await cmd.ExecuteNonQueryAsync();
+                    }
+                }
+
+                return  Ok(new { message = "Utilisateur créé avec succès !" });
+            }
+            catch (Exception ex)
+            {
+                // Gérer les erreurs
+                return StatusCode(500, $"Erreur : {ex.Message}");
+            }
         }
 
         // DELETE: api/Users/5

@@ -34,17 +34,26 @@ namespace api_donkey_air.Controllers
             try
             {
                 // Connexion à la base de données
-                using (MySqlConnection connection = new MySqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                using (DbConnection connection =  _context.Database.GetDbConnection())
                 {
+                    if (connection.State != ConnectionState.Open)
                     await connection.OpenAsync();
 
-                    using (MySqlCommand cmd = new MySqlCommand("GetTicketsByDepartureAndDestination", connection))
+                    using (DbCommand cmd = connection.CreateCommand())
                     {
+                        cmd.CommandText = "GetTicketsByDepartureAndDestination";
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         // Ajout des paramètres
-                        cmd.Parameters.AddWithValue("@p_IdDeparture", idDeparture);
-                        cmd.Parameters.AddWithValue("@p_IdDestination", idDestination);
+                        var pIdDeparture = cmd.CreateParameter();
+                        pIdDeparture.ParameterName = "@p_IdDeparture";
+                        pIdDeparture.Value = idDeparture;
+                        cmd.Parameters.Add(pIdDeparture);
+
+                        var pIdDestination = cmd.CreateParameter();
+                        pIdDestination.ParameterName = "@p_IdDestination";
+                        pIdDestination.Value = idDestination;
+                        cmd.Parameters.Add(pIdDestination);
 
                         using (DbDataReader reader = await cmd.ExecuteReaderAsync())
                         {

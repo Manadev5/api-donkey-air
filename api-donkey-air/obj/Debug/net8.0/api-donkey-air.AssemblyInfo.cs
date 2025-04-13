@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("api-donkey-air")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa131d4bee42c1b5db172535d97467390c012526")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe6ba866c421200ce4e135ca5ec9412b62a6abf0")]
 [assembly: System.Reflection.AssemblyProductAttribute("api-donkey-air")]
 [assembly: System.Reflection.AssemblyTitleAttribute("api-donkey-air")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "PSPWjnzUQh8=",
+  "dgSpecHash": "HOIDwaJye+s=",
   "success": true,
   "projectFilePath": "C:\\Users\\UTILISATEUR\\Desktop\\projets\\api-donkey-air\\api-donkey-air\\api-donkey-air.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\UTILISATEUR\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\UTILISATEUR\\.nuget\\packages\\bouncycastle.cryptography\\2.3.1\\bouncycastle.cryptography.2.3.1.nupkg.sha512",
     "C:\\Users\\UTILISATEUR\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\UTILISATEUR\\.nuget\\packages\\google.protobuf\\3.26.1\\google.protobuf.3.26.1.nupkg.sha512",

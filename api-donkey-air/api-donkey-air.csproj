@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ConnectionToDB.cs" />
     <Compile Remove="Controllers\AdminsController.cs" />
     <Compile Remove="Models\Admin.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
       <PrivateAssets>all</PrivateAssets>

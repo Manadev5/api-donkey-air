@@ -508,3 +508,4 @@ C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net8.0\api-donkey-air.pdb
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net8.0\api-donkey-air.genruntimeconfig.cache
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net8.0\ref\api-donkey-air.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\BCrypt.Net-Next.dll

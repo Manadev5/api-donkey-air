@@ -12,7 +12,6 @@ namespace api_donkey_air.Models
 
         public DbSet<Departure> Departure { get; set; }
         public DbSet<Destination> Destination { get; set; }
-        public DbSet<Admin> Admin { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
 
