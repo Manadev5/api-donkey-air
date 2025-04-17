@@ -32,18 +32,21 @@ namespace api_donkey_air.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        [HttpGet]
+        public async Task<ActionResult<User>> GetUserFromCredentials(string pName, string pPassword)
         {
-            var user = await _context.User.FindAsync(id);
-
-            if (user == null)
+            User user = _context.User.FirstOrDefault(u => u.name == pName);
+            if (user == null) {
+                throw new Exception("L'utilisateur n'existe pas");
+            }
+            else
             {
-                return NotFound();
+                AuthService.VerifyPassword(pPassword, user.password);
             }
 
-            return user;
+            
         }
+
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -128,7 +131,6 @@ namespace api_donkey_air.Controllers
                             }
                         }
 
-                        await cmd.ExecuteNonQueryAsync();
                     }
                 }
 
