@@ -509,3 +509,9 @@ C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net8.0\api-donkey-air.genruntimeconfig.cache
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\obj\Debug\net8.0\ref\api-donkey-air.dll
 C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\UTILISATEUR\Desktop\projets\api-donkey-air\api-donkey-air\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

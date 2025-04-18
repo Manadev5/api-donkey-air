@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using api_donkey_air.Models;
 using System.Configuration;
+using api_donkey_air.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,10 @@ builder.Services.AddDbContext<DonkeyAirContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 30)) // Remplace la version par celle de ton serveur MySQL
-    )
+)
 );
+
+builder.Services.AddScoped<JWTService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

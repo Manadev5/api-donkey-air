@@ -18,10 +18,12 @@ namespace api_donkey_air.Controllers
     public class UsersController : ControllerBase
     {
         private readonly DonkeyAirContext _context;
+        private readonly JWTService _jwtservice;
 
-        public UsersController(DonkeyAirContext context)
+        public UsersController(DonkeyAirContext context, JWTService JWTService)
         {
             _context = context;
+            _jwtservice = JWTService;
         }
 
         // GET: api/Users
@@ -32,19 +34,24 @@ namespace api_donkey_air.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet]
+        [HttpGet("connection")]
         public async Task<ActionResult<User>> GetUserFromCredentials(string pName, string pPassword)
         {
-            User user = _context.User.FirstOrDefault(u => u.name == pName);
+            User user =  _context.User.FirstOrDefault(u => u.name == pName);
             if (user == null) {
                 throw new Exception("L'utilisateur n'existe pas");
             }
-            else
+            await _context.User.FindAsync(user.IdUser);
+
+             bool ispasswordVerified = AuthService.VerifyPassword(pPassword, user.password);
+            if (!ispasswordVerified)
             {
-                AuthService.VerifyPassword(pPassword, user.password);
+                throw new Exception("Mot de passe de l'utilisateur incorrect");
             }
 
-            
+             string token =  _jwtservice.GenerateToken(user.name);
+            return  Ok( new{ message = "Connexion réussie", token});
+                
         }
 
 
