@@ -141,7 +141,9 @@ namespace api_donkey_air.Controllers
                     }
                 }
 
-                return  Ok(new { message = "Utilisateur créé avec succès !" });
+                string token = _jwtservice.GenerateToken(user.name);
+
+                return Ok(new { message = "Utilisateur créé avec succès !", token });
             }
             catch (Exception ex)
             {
